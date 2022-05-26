@@ -12,6 +12,7 @@ GUISetState(@SW_SHOW, $GUI)
 WinSetOnTop($GUI, "", $WINDOWS_ONTOP)
 
 $clicked = False
+$reset_timer = False
 $prev = 0
 $prevX = 0
 $oldres = "0x0"
@@ -42,13 +43,17 @@ while 1
 			if (($clr = 0x001e252a or $clr = 0x0001587f) And Not $clicked) Then
 				Beep(2000, 50)
 				_MouseTrap($coords[0], $coords[1])
-				MouseClick("Left", $coords[0], $coords[1], $league, 1)
+				MouseClick("Left", $coords[0], $coords[1], $league, 1)6
 				_MouseTrap()
 				$clicked = True
+				$reset_timer = TimerInit()
 			endif
 		EndIf
 	Else
 		$clicked = False
+	EndIf
+	if ($reset_timer) Then
+		If (TimerDiff($reset_timer) > 10000) Then $reset_timer = False
 	EndIf
 	GUICtrlSetData($G_status, $status)
 	sleep(200)
